@@ -1,0 +1,77 @@
+
+<!------ Include the above in your HEAD tag ---------->
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>SignUp Page</title>
+    
+    <link rel="stylesheet" type="text/css" href="style.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	<!--Custom styles-->
+	<link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+	<div class="container" id="container">
+
+		<div class="form-container sign-up-container">
+			<div class="test">
+			<h1>Create Account</h1>
+			<div class="social-container">
+				<a class="social fb-sign-in"><i class="fa fa-facebook"></i></a>
+				<a class="social google-sign-in"><i class="fa fa-google"></i></a>
+				<a class="social twitter-sign-in"><i class="fa fa-twitter"></i></a>
+		</div>
+			<input type="email" name="email" id="newEmail" placeholder="Email">
+			<input type="password" name="password" id="newPassword" placeholder="Password">
+			<button class="reg_btn">SignUp</button>
+		</div>
+		</div>
+
+		<div class="form-container sign-in-container">
+			<div class="test">
+				<h1>Sign In</h1>
+				<div class="social-container">
+					<a class="social fb-signin"><i class="fa fa-facebook"></i></a>
+					<a class="social google-signin"><i class="fa fa-google"></i></a>
+					<a class="social twitter-signin"><i class="fa fa-twitter"></i></a>
+			</div>
+			<span>or use your account</span>
+			<input type="email" name="email" id="loginEmail" placeholder="Email">
+			<input type="password" name="password" id="loginPassword" placeholder="Password">
+			<a href="#">Forgot Your Password</a>
+			<button class="login_btn">Sign In</button>
+			</div>
+		</div>
+
+		<div class="overlay-container">
+			<div class="overlay">
+				<div class="overlay-panel overlay-left">
+					<h1>Welcome Back!</h1>
+					<p>To keep connected with us please login with your personal info</p>
+					<button class="ghost" id="signIn">Sign In</button>
+				</div>
+				<div class="overlay-panel overlay-right">
+					<h1>Hello, Friend!</h1>
+					<p>Enter your details and start journey with us</p>
+					<button class="ghost" id="signUp">Sign Up</button>
+				</div>
+			</div>
+		</div>
+		</div>
+		<script type="module" src="./firebase.js"></script>
+		<script type="text/javascript">
+			const signUpButton = document.getElementById('signUp');
+			const signInButton = document.getElementById('signIn');
+			const container = document.getElementById('container');
+		
+			signUpButton.addEventListener('click', () => {
+				container.classList.add("right-panel-active");
+			});
+			signInButton.addEventListener('click', () => {
+				container.classList.remove("right-panel-active");
+			});
+		</script>
+</body>
+</html>
