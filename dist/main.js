@@ -4,6 +4,8 @@ var standard = L.tileLayer.provider('OpenStreetMap.Mapnik');
 var sat = L.tileLayer.provider('Esri.WorldImagery');
 var stamentoner = L.tileLayer.provider('Stamen.Toner');
 
+const myGeoapify = "29e03bd651df4e70b56db34c0ebd5253";
+
 //basemaps
 var basemaps = {
     'Standard Map': standard,
@@ -54,7 +56,6 @@ L.Control.geocoder().addTo(map);
 //leaflet-locate plugin https://github.com/domoritz/leaflet-locatecontrol
 L.control.locate().addTo(map);
 
-
 addMarker = false;
 marker = null;
 
@@ -74,6 +75,18 @@ document.querySelector(".addev").addEventListener("click", function() {
     document.getElementById("forlat").value = coordinates.lat;
     document.getElementById("forlng").value = coordinates.lng;
 
+  const reverseGeocodingUrl = `https://api.geoapify.com/v1/geocode/reverse?lat=${coordinates.lat}&lon=${coordinates.lng}&apiKey=${myGeoapify}`;
+
+    fetch(reverseGeocodingUrl).then(result => result.json())
+    .then(featureCollection => {
+      if (featureCollection.features.length === 0) {
+        document.getElementById("status").textContent = "The address is not found";
+        return;
+      }
+      const foundAddress = featureCollection.features[0];
+      document.getElementById("address").value = (foundAddress.properties.name || '') + ', ' + (foundAddress.properties.street || '')+ ', ' + (foundAddress.properties.city || '');
+
+    })
       //code for showing modal
       var modalElement = document.querySelector('#report_mod');
     var modalInstance = new bootstrap.Modal(modalElement);

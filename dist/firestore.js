@@ -33,6 +33,8 @@ addDataForm.addEventListener("submit", async function(e) {
   var lname = document.getElementById("lname").value;
   var lat = document.getElementById("forlat").value;
   var lng = document.getElementById("forlng").value;
+  var ev = document.getElementById("event").value;
+  var ad = document.getElementById("address").value;
   var desc = document.getElementById("eventdesc").value;
 
   const subrep = collection(db, "reports")
@@ -44,6 +46,8 @@ addDataForm.addEventListener("submit", async function(e) {
       lastname: lname,
       latitude: lat,
       longitude: lng,
+      address: ad,
+      event: ev,
       description: desc,
       timestamp: formattedDate
     });
@@ -52,7 +56,7 @@ addDataForm.addEventListener("submit", async function(e) {
     // Fetch the latest data and update the DataTable
     const querySnapshot = await getDocs(queryDesc);
     updateDataTable(querySnapshot);
-  
+
     Swal.fire({
       position: 'bottom-end',
       icon: 'success',
@@ -82,14 +86,16 @@ const reportscol = collection(db, "reports");
 const queryDesc = query(reportscol, orderBy("timestamp", "desc"));
 const tbody = document.getElementById("tbl_visual");
 
+
 function updateDataTable(querySnapshot) {
   let tableRows = "";
 
   querySnapshot.forEach((queryDoc) => {
     tableRows += `
-      <tr data-lat="${queryDoc.data().latitude}" data-lng="${queryDoc.data().longitude}">
-        <td>${queryDoc.data().firstname + ' ' + queryDoc.data().lastname}</td>
-        <td>${queryDoc.data().description}</td>
+      <tr data-lat="${queryDoc.data().latitude}" data-lng="${queryDoc.data().longitude}" data-fname="${queryDoc.data().firstname}" data-lname="${queryDoc.data().lastname}" data-eventdesc="${queryDoc.data().description}">
+
+        <td>${queryDoc.data().address}</td>
+        <td>${queryDoc.data().event}</td>
         <td>${queryDoc.data().timestamp}</td>
         <td>
           <button type="button" class="btn btn-warning btn-sm edit" id="updateBtn"><ion-icon name="create-sharp"></ion-icon></button>
@@ -97,6 +103,8 @@ function updateDataTable(querySnapshot) {
         </td>
       </tr>
     `;
+
+    // L.marker([queryDoc.data().latitude, queryDoc.data().longitude]).addTo(map)
   });
 
   tbody.innerHTML = tableRows;
@@ -111,37 +119,49 @@ function updateDataTable(querySnapshot) {
   });
 
   // Add event listeners for edit buttons
-const updateBtn = document.querySelectorAll('#updateBtn');
-updateBtn.forEach((button) => {
-  button.addEventListener('click', () => {
-    const row = button.closest('tr');
-    const rowData = row.cells;
+  const updateBtn = document.querySelectorAll('#updateBtn');
+  updateBtn.forEach((button) => {
+    button.addEventListener('click', () => {
+      const row = button.closest('tr');
+      const rowData = row.cells;
+  
+      // Retrieve the data from the row
+      const address = rowData[0].innerText;
+      const event = rowData[1].innerText;
+      const timestamp = rowData[2].innerText;
+      const documentId = button.nextElementSibling.getAttribute('data-id').split('-')[0];
+  
+      // Retrieve the latitude and longitude from the row's data-* attributes
+      const latitude = row.getAttribute('data-lat');
+      const longitude = row.getAttribute('data-lng');
+      const fname = row.getAttribute('data-fname');
+      const lname = row.getAttribute('data-lname');
+      const desc = row.getAttribute('data-eventdesc');
 
-    // Retrieve the data from the row
-    const firstname = rowData[0].innerText.split(' ')[0];
-    const lastname = rowData[0].innerText.split(' ')[1];
-    const description = rowData[1].innerText;
-    const documentId = button.nextElementSibling.getAttribute('data-id').split('-')[0];
-
-    // Retrieve the latitude and longitude from the row's data-* attributes
-    const latitude = row.getAttribute('data-lat');
-    const longitude = row.getAttribute('data-lng');
-
-    // Populate the modal fields with the retrieved data
-    document.getElementById('edt_fname').value = firstname;
-    document.getElementById('edt_lname').value = lastname;
-    document.getElementById('edt_eventdesc').value = description;
-    document.getElementById('edt_forlat').value = latitude;
-    document.getElementById('edt_forlng').value = longitude;
-
-    // Store the documentId in a data attribute on the form
-    document.getElementById('addDataForm').dataset.id = documentId;
-
-    // Show the modal
-    const modalInstance = new bootstrap.Modal(document.getElementById('edit_report_mod'), {});
-    modalInstance.show();
+      // Populate the modal fields with the retrieved data
+      document.getElementById('edt_fname').value = fname;
+      document.getElementById('edt_lname').value = lname;
+      document.getElementById('edt_address').value = address;
+      document.getElementById('edt_eventdesc').value = desc;
+      document.getElementById('edt_forlat').value = latitude;
+      document.getElementById('edt_forlng').value = longitude;
+  
+      // Set the selected option in the Event dropdown
+      const eventDropdown = document.getElementById('edt_event');
+      Array.from(eventDropdown.options).forEach((option) => {
+        if (option.value === event) {
+          option.selected = true;
+        }
+      });
+  
+      // Store the documentId in a data attribute on the form
+      document.getElementById('addDataForm').dataset.id = documentId;
+  
+      // Show the modal
+      const modalInstance = new bootstrap.Modal(document.getElementById('edit_report_mod'), {});
+      modalInstance.show();
+    });
   });
-});
 
 if (!$.fn.DataTable.isDataTable('#tablereports')) {
   $('#tablereports').DataTable();
@@ -149,7 +169,6 @@ if (!$.fn.DataTable.isDataTable('#tablereports')) {
   $('#tablereports').DataTable().clear().rows.add($(tbody).find('tr')).draw();
 }
 }
-
 onSnapshot(queryDesc, (querySnapshot) => {
   updateDataTable(querySnapshot);
 });
@@ -194,33 +213,40 @@ const deleteDocument = async (documentId, button) => {
   }
 };
 
-// UPDATE FUNCTION
+// // UPDATE FUNCTION
 document.getElementById('editBtn').addEventListener('click', async (event) => {
   event.preventDefault();
 
   try {
     const firstname = document.getElementById('edt_fname').value;
     const lastname = document.getElementById('edt_lname').value;
+    const event = document.getElementById('edt_event').value;
     const description = document.getElementById('edt_eventdesc').value;
     const latitude = document.getElementById('edt_forlat').value;
     const longitude = document.getElementById('edt_forlng').value;
+    const address = document.getElementById('edt_address').value;
     const documentId = document.getElementById('addDataForm').dataset.id;
 
     // Update the document in Firestore
     await updateDoc(doc(db, "reports", documentId), {
       firstname: firstname,
       lastname: lastname,
+      event: event,
       description: description,
       latitude: latitude,
-      longitude: longitude
+      longitude: longitude,
+      address: address
     });
 
     // Update the table row in the DOM
     const row = document.querySelector(`button[data-id="${documentId}-delete"]`).closest('tr');
-    row.cells[0].innerText = firstname + ' ' + lastname;
-    row.cells[1].innerText = description;
+    row.cells[0].innerText = address;
+    row.cells[1].innerText = event;
     row.setAttribute('data-lat', latitude);
     row.setAttribute('data-lng', longitude);
+    row.setAttribute('data-fname', firstname);
+    row.setAttribute('data-lname', lastname);
+    row.setAttribute('data-eventdesc', description);
 
     // Hide the modal after the update
     const modalInstance = bootstrap.Modal.getInstance(document.getElementById('edit_report_mod'));
@@ -245,6 +271,8 @@ function resetForm() {
   document.getElementById("forlat").value = "";
   document.getElementById("forlng").value = "";
   document.getElementById("eventdesc").value = "";
+  document.getElementById("event").value = "";
+  document.getElementById("address").value = "";
 }
 
 // Define the modalElement variable

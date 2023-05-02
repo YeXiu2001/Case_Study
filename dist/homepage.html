@@ -44,10 +44,10 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
+            <a class="nav-link active" aria-current="page" href="homepage.html">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link addev" data-bs-toggle="modal">ClickMe To Report</a>
+            <a class="nav-link" href="dv.html">Data Visualization</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">About Us</a>
@@ -68,7 +68,7 @@
       <table class="table table-primary table-striped table-bordered table-hover" id="tablereports">
         <thead>
           <tr>
-            <th scope="col">Name</th>
+            <th scope="col">Address</th>
             <th scope="col">Event</th>
             <th scope="col">Date</th>
             <th scope="col">Action</th>
@@ -79,6 +79,9 @@
       </table>
     </div>
 
+    <div class="but">
+      <button type="button" class="btn btn-primary addev">Report</button>
+      </div>
   </div>
   <!-- main container end -->
 
@@ -112,6 +115,27 @@
           <input type="text" id="forlat" class="form-control " value="${latitude}" disabled>
           <input type="text" id="forlng" class="form-control " value="${longitude}" disabled>
         </div>
+
+          <div class="input-group pt-2">
+            <div class="input-group-prepend col-2">
+              <label class="input-group-text" for="event">Event</label>
+            </div>
+            <select class="custom-select col-10" id="event" required>
+              <option value="" selected hidden>Choose..If others provide detailed description.</option>
+              <option>car crash</option>
+              <option>fire</option>
+              <option>mudflow</option>
+              <option>storm surge</option>
+              <option>wildfire</option>
+              <option>tornado</option>
+              <option>destroyed structures(building,house,etc)</option>
+              <option>Others</option>
+            </select>
+          </div>
+
+          <div class="pt-2">
+            <input type="text" id="address" class="form-control" placeholder="address" required>
+          </div>
 
         <div class="pt-2">
         <textarea class="form-control pt-2" id="eventdesc" rows="3" placeholder = "Enter Event Description" required></textarea>
@@ -159,6 +183,27 @@
           <input type="text" id="edt_forlng" class="form-control " value="${longitude}" disabled>
         </div>
 
+        <div class="input-group pt-2">
+          <div class="input-group-prepend col-2">
+            <label class="input-group-text" for="edt_event">Event</label>
+          </div>
+          <select class="custom-select col-10" id="edt_event" required>
+            <option value="" selected hidden>Choose..If others provide detailed description.</option>
+            <option>car crash</option>
+            <option>fire</option>
+            <option>mudflow</option>
+            <option>storm surge</option>
+            <option>wildfire</option>
+            <option>tornado</option>
+            <option>destroyed structures(building,house,etc)</option>
+            <option>Others</option>
+          </select>
+        </div>
+
+        <div class="pt-2">
+          <input type="text" id="edt_address" class="form-control" placeholder="address" required>
+        </div>
+
         <div class="pt-2">
         <textarea class="form-control pt-2" id="edt_eventdesc" rows="3" placeholder = "Enter Event Description" required></textarea>
         </div>
@@ -173,6 +218,7 @@
       </div>
     </div>
     <!--Edit Modal End -->
+
 
     <!-- body end -->
     <script src="globals.js"></script>
