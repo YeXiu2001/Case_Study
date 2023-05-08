@@ -163,6 +163,7 @@ function updateDataTable(querySnapshot) {
     });
   });
 
+  // realtme dtb
 if (!$.fn.DataTable.isDataTable('#tablereports')) {
   $('#tablereports').DataTable();
 } else {

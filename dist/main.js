@@ -34,7 +34,7 @@ var geoOptions = {
 var ic_admin = L.geoJson(lineJSON, geoOptions).addTo(map);
 
 //shapefile
-// var ic_full_admin = L.geoJson(ic_full_admin, geoOptions).addTo(map);
+var ic_full_admin = L.geoJson(ic_full_admin, geoOptions).addTo(map);
 
 //declare overlays
 var labels = L.tileLayer.provider('Stamen.TonerLabels');
@@ -43,7 +43,7 @@ var streets = L.tileLayer.provider('Stamen.TonerLines');
 //initialize overlays
 var overlays = {
     "Iligan Admin Boundary": ic_admin,
-    //"full admin boundaries": ic_full_admin,
+    "full admin boundaries": ic_full_admin,
     "labels": labels,
     'streets': streets
 }
