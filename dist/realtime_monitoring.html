@@ -8,12 +8,17 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-   
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css" integrity="sha384-b6lVK+yci+bfDmaY1u0zE8YYJt0TZxLEAFyYSLHId4xoVvsrQu3INevFKo+Xir8e" crossorigin="anonymous">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+    
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin=""/>
     
      <!-- Custom CSS -->
-     <link rel="stylesheet" href="style.css"/>
+     <link rel="stylesheet" href="rm.css"/>
 
      <!-- leaflet search Control https://github.com/perliedman/leaflet-control-geocoder-->
      <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
@@ -24,7 +29,7 @@
      <!-- Sweet Alert 2 -->
      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-         <!-- DataTables CSS -->
+    <!-- DataTables CSS -->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css"/>
     
     <!-- jQuery -->
@@ -57,42 +62,356 @@
     </div>
   </nav>
   <!-- navigation end -->
-      <!-- main container start -->
-  <div class="container-main">
-
-
+  <!-- main container start -->
+  <div class="container-main container-gap">
     <!-- Div for map -->
     <div class="map" id="map"></div>
     <!-- map end -->
+    <!-- Cards for Temp, Humid, Gas -->
+    <div class="container">
+        <div class="row">
 
-    <div class="cards">
-    <div class="card text-bg-primary mb-3">
-        <div class="card-header">Header</div>
-        <div class="card-body">
-          <h5 class="card-title">Temperature</h5>
-          <p class="card-text" id="temperature"></p>
+          <!-- Temperature Card -->
+          <div class="col-md-6 temp-card mb-10">
+            <div class="card border-primary mb-3">
+              <div class="card-header">
+                <h5 class="card-title">Temperature <span>| in °C</span></h5>
+              </div>
+              <div class="card-body">  
+                <div class="d-flex align-items-center">
+                  <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                    <i class="bi bi-thermometer-half"></i>
+                  </div>
+                  <div>
+                    <h6 id="Temperature"></h6>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div><!-- End Temperature Card -->
+
+          <!-- Humidity Card -->
+          <div class="col-md-6 humid-card">
+            <div class="card border-primary mb-3">
+              <div class="card-header">
+                <h5 class="card-title">Humidity <span>| in %</span></h5>
+              </div>
+              <div class="card-body">  
+                <div class="d-flex align-items-center">
+                  <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                    <i class="bi bi-droplet-half"></i>
+                  </div>
+                  <div>
+                    <h6 id="humidity"></h6>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div><!-- End Humidity Card -->
+
+        </div>
+
+        <div class="col">
+<!-- Air Quality Card -->
+<div class="col-md-12 gas-card">
+    <div class="card border-primary mb-3">
+      <div class="card-header">
+        <h5 class="card-title">Carbon Dioxide <span>| in PPM</span></h5>
+      </div>
+      <div class="card-body">
+        <div class="d-flex align-items-center">
+          <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+            <i class="bi bi-wind"></i>
+          </div>
+          <div class="ps-3">
+            <h6 id="co2"></h6>
+          </div>
+          <div class="gas-description ms-auto d-flex flex-column align-items-center">
+            <span class="air-quality-label">Air Quality Description</span>
+            <div class="air-desc-container">
+              <h5><strong id="airdesc"></strong></h5>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="card text-bg-primary mb-3">
-        <div class="card-header">Header</div>
-        <div class="card-body">
-          <h5 class="card-title">Humidity</h5>
-          <p class="card-text" id="humidity"></p>
-        </div>
-      </div>
-      <div class="card text-bg-primary mb-3">
-        <div class="card-header">Header</div>
-        <div class="card-body">
-          <h5 class="card-title">Gas Emmission</h5>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        </div>
-      </div>
-    </div>  
+    </div>
+  </div>
+  <!-- End Air Quality Card -->
+  
+<!-- Line Chart -->
+<div class="m">
+          <div class="col-md-12 d-flex hum-card">
+            <div class="card border-primary">
+<div id="chart-temperature"></div>
+<script type="module">
+  window.chartT = new Highcharts.Chart({
+    innerheight: 10,
+    chart: { renderTo: 'chart-temperature' },
+    title: { text: 'Temperature and Humidity' },
+    series: [
+      {
+        name: 'Temperature',
+        data: [],
+        color: '#059e8a'
+      },
+      {
+        name: 'Humidity',
+        data: [],
+        color: '#f15c80'
+      }
+    ],
+    plotOptions: {
+      line: {
+        animation: false,
+        dataLabels: { enabled: true }
+      }
+    },
+    xAxis: { type: 'datetime',
+      dateTimeLabelFormats: { second: '%H:%M:%S' }
+    },
+    yAxis: {
+      title: { text: 'Temperature (Celsius) / Humidity (%)' }
+      //title: { text: 'Temperature (Fahrenheit) / Humidity (%)' }
+    },
+    credits: { enabled: false }
+  });
+
+  const firebaseUrl = "https://testcase-190aa-default-rtdb.asia-southeast1.firebasedatabase.app/DHT11.json";
+  
+  function fetchTemperatureAndHumidity() {
+    fetch(firebaseUrl)
+      .then((response) => response.json())
+      .then((data) => {
+        const timestamp = (new Date()).getTime();
+        const temperature = parseFloat(data.Temperature);
+        const humidity = parseFloat(data.Humidity);
+
+        if (window.chartT.series[0].data.length > 40) {
+          window.chartT.series[0].addPoint([timestamp, temperature], true, true, true);
+          window.chartT.series[1].addPoint([timestamp, humidity], true, true, true);
+        } else {
+          window.chartT.series[0].addPoint([timestamp, temperature], true, false, true);
+          window.chartT.series[1].addPoint([timestamp, humidity], true, false, true);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching temperature and humidity:", error);
+      });
+  }
+
+  // Fetch the data initially
+  fetchTemperatureAndHumidity();
+  setInterval(fetchTemperatureAndHumidity, 10000); // Fetch data every 10 seconds
+</script>
+</div></div></div>
+<!-- End Line Chart -->
+
+    </div>
+    </div>
+
   </div><!-- main container end -->
 
+  <div class="another-container">
+  <div class="row">
 
+<!-- Temperature Card -->
+<div class="col temp-card" style="margin-left: 10px;">
+    <div class="card border-primary mb-3">
+      <!-- <div class="card-header">
+        <h5 class="card-title">Temperature Line Chart</span></h5>
+      </div> -->
+      <div class="card-body">
+        <!-- Line Chart -->
+        <div id="chart-temp"></div>
+      </div>
+    </div>
+  </div><!-- End Temperature Card -->
+  
+  <script type="module">
+    window.chartTemp = new Highcharts.Chart({
+      innerheight: 10,
+      chart: { renderTo: 'chart-temp' },
+      title: { text: 'Temperature' },
+      series: [{
+          showInLegend: false,
+          data: [],
+          color: '#059e8a'
+      }],
+      plotOptions: {
+          line: {
+              animation: false,
+              dataLabels: { enabled: true }
+          },
+      },
+      xAxis: { type: 'datetime',
+          dateTimeLabelFormats: { second: '%H:%M:%S' }
+      },
+      yAxis: {
+          title: { text: 'Temperature (Celsius)' }
+          //title: { text: 'Temperature (Fahrenheit)' }
+      },
+      credits: { enabled: false }
+    });
+    const firebaseUrl1 = "https://testcase-190aa-default-rtdb.asia-southeast1.firebasedatabase.app/DHT11.json";
+
+    function fetchTemperature() {
+      fetch(firebaseUrl1)
+        .then((response) => response.json())
+        .then((data) => {
+          const timestamp = (new Date()).getTime();
+          const temperature = parseFloat(data.Temperature);
+  
+          if (window.chartTemp.series[0].data.length > 40) {
+            window.chartTemp.series[0].addPoint([timestamp, temperature], true, true, true);
+          } else {
+            window.chartTemp.series[0].addPoint([timestamp, temperature], true, false, true);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching temperature:", error);
+        });
+    }
+  
+    // Fetch the data initially
+    fetchTemperature();
+    setInterval(fetchTemperature, 10000); // Fetch data every 10 seconds
+  </script>
+  
+
+
+<!-- Humidity line chart Card -->
+<div class="col humid-card">
+    <div class="card border-primary mb-3">
+      <div class="card-body">
+        <!-- Humidity Line Chart -->
+        <div id="chart-humidity"></div>
+        <script type="module">
+          const firebaseUrl2 = "https://testcase-190aa-default-rtdb.asia-southeast1.firebasedatabase.app/DHT11.json";
+  
+          window.chartH = new Highcharts.Chart({
+            innerheight: 10,
+            chart: { renderTo: 'chart-humidity' },
+            title: { text: 'Humidity' },
+            series: [{
+                showInLegend: false,
+                data: [],
+                color: '#f15c80'
+            }],
+            plotOptions: {
+                line: {
+                    animation: false,
+                    dataLabels: { enabled: true }
+                },
+            },
+            xAxis: { type: 'datetime',
+                dateTimeLabelFormats: { second: '%H:%M:%S' }
+            },
+            yAxis: {
+                title: { text: 'Humidity (%)' }
+            },
+            credits: { enabled: false }
+          });
+  
+          function fetchHumidity() {
+            fetch(firebaseUrl2)
+              .then((response) => response.json())
+              .then((data) => {
+                const timestamp = (new Date()).getTime();
+                const humidity = parseFloat(data.Humidity);
+  
+                if (window.chartH.series[0].data.length > 40) {
+                  window.chartH.series[0].addPoint([timestamp, humidity], true, true, true);
+                } else {
+                  window.chartH.series[0].addPoint([timestamp, humidity], true, false, true);
+                }
+              })
+              .catch((error) => {
+                console.error("Error fetching humidity:", error);
+              });
+          }
+  
+          // Fetch the data initially
+          fetchHumidity();
+          setInterval(fetchHumidity, 10000); // Fetch data every 10 seconds
+        </script>
+        <!-- End Humidity Line Chart -->
+      </div>
+    </div>
+  </div><!-- End line chart Humidity Card -->
+  
+
+<!-- CO2 Line Chart Card -->
+<div class="col humid-card" style="margin-right: 10px;">
+    <div class="card border-primary mb-3">
+      <div class="card-body">
+        <!-- CO2 Line Chart -->
+        <div id="chart-co2"></div>
+        <script type="module">
+          import { db } from './realtimedb.js';
+          import { ref, onValue } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-database.js";
+          
+          const firebaseUrl3 = "https://testcase-190aa-default-rtdb.asia-southeast1.firebasedatabase.app/MQ135.json";
+  
+          window.chartCO2 = new Highcharts.Chart({
+            innerheight: 10,
+            chart: { renderTo: 'chart-co2' },
+            title: { text: 'Carbon Dioxide' },
+            series: [{
+                showInLegend: false,
+                data: [],
+                color: '#7cb5ec'
+            }],
+            plotOptions: {
+                line: {
+                    animation: false,
+                    dataLabels: { enabled: true }
+                },
+            },
+            xAxis: { type: 'datetime',
+                dateTimeLabelFormats: { second: '%H:%M:%S' }
+            },
+            yAxis: {
+                title: { text: 'CO2 (PPM)' }
+            },
+            credits: { enabled: false }
+          });
+  
+          function fetchCO2() {
+            fetch(firebaseUrl3)
+              .then((response) => response.json())
+              .then((data) => {
+                const timestamp = (new Date()).getTime();
+                const co2 = parseFloat(data.CO2);
+  
+                if (window.chartCO2.series[0].data.length > 40) {
+                  window.chartCO2.series[0].addPoint([timestamp, co2], true, true, true);
+                } else {
+                  window.chartCO2.series[0].addPoint([timestamp, co2], true, false, true);
+                }
+              })
+              .catch((error) => {
+                console.error("Error fetching CO2:", error);
+              });
+          }
+  
+          // Fetch the data initially
+          fetchCO2();
+          setInterval(fetchCO2, 10000); // Fetch data every 10 seconds
+        </script>
+        <!-- End CO2 Line Chart -->
+      </div>
+    </div>
+  </div><!-- CO2 Line Chart Card End-->
+  </div><!-- end div class col sa card -->
+</div><!-- end sa nother container -->
   <script src="globals.js"></script>
   <script type="module" src="realtimedb.js"></script>
+  
+  <!-- Apex Charts -->
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 

@@ -21,9 +21,11 @@ const firebaseConfig = {
 /// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-
-var temperatureElement = document.getElementById("temperature");
+export { db };
+var temperatureElement = document.getElementById("Temperature");
 var humidityElement = document.getElementById("humidity");
+var CO2element = document.getElementById("co2");
+var airdescriptElement = document.getElementById("airdesc")
 
 // Read data from Firebase
 onValue(ref(db, "/DHT11"), (snapshot) => {
@@ -33,6 +35,40 @@ onValue(ref(db, "/DHT11"), (snapshot) => {
 const temp = data.Temperature;
 const hum = data.Humidity;
   // Display data on the web app
-  temperatureElement.innerText = temp + " *C";
-  humidityElement.innerText =  hum + " %";
+  temperatureElement.innerText = temp + "°C";
+  humidityElement.innerText =  hum + "%";
 });
+
+// Read data from Firebase
+onValue(ref(db, "/MQ135"), (snapshot) => {
+    var data = snapshot.val();
+  
+  //   store data from database
+  const co2 = data.CO2;
+  const airdesc = data.AirQuality;
+    // Display data on the web app
+    CO2element.innerText = co2;
+    airdescriptElement.innerText =  airdesc;
+  });
+
+// Emit a custom event when temperature is updated
+function emitTemperatureUpdate(timestamp, temperature) {
+    const event = new CustomEvent('temperatureUpdate', { detail: { timestamp, temperature } });
+    window.dispatchEvent(event);
+  }
+  
+  // Listen to temperature data updates from Firebase
+//   onValue(ref(db, "/DHT11"), (snapshot) => {
+//     var data = snapshot.val();
+  
+//     // Get the timestamp and temperature
+//     const timestamp = (new Date()).getTime();
+//     const temperature = parseFloat(data.Temperature);
+  
+//     // Emit a custom event with the updated temperature
+//     emitTemperatureUpdate(timestamp, temperature);
+//   });
+
+  
+  
+  
