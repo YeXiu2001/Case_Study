@@ -54,9 +54,15 @@
           <li class="nav-item">
             <a class="nav-link" href="dv.html">Data Visualization</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link active" href="realtime_monitoring.html">Realtime Data Monitoring</a>
+          <li class="nav-item dropdown">
+            <a class="nav-link active dropdown-toggle" href="realtime_monitoring.html" role="button" data-bs-toggle="dropdown" aria-expanded="false">Realtime Data Monitoring</a>
+            <ul class="dropdown-menu">
+              <li data-bs-toggle="modal" data-bs-target="#circuitID"><a class="dropdown-item" >Circuit Diagram</a></li>
+            </ul>
           </li>
+          <!-- <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="modal" data-bs-target="#circuitID">Circuit Diagram</a>
+          </li> -->
         </ul>
       </div>
     </div>
@@ -443,6 +449,28 @@
   </div><!-- CO2 Line Chart Card End-->
   </div><!-- end div class col sa card -->
 </div><!-- end sa nother container -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="circuitID" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered ">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Circuit Diagram</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <img src="./GIS-Sketch.png" alt="Circuit" style="width: 100%">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
   <script src="globals.js"></script>
   <script type="module" src="realtimedb.js"></script>
   
