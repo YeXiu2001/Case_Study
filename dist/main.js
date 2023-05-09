@@ -114,8 +114,6 @@ document.getElementById("cancelmod").addEventListener("click", handleCancelButto
 document.getElementById("cancel-modal").addEventListener("click", handleCancelButton);
 
 
-
-
 // var circle = L.circle([8.241,124.244],
 //   {
 //     color: 'red',

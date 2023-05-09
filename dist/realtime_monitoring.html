@@ -141,71 +141,78 @@
   <!-- End Air Quality Card -->
   
 <!-- Line Chart -->
-<div class="m">
-          <div class="col-md-12 d-flex hum-card">
-            <div class="card border-primary">
-<div id="chart-temperature"></div>
+  <div class="col-md-12">
+    <div class="card border-primary">
+      <div id="chart-temperature" class="chart-container"></div>
 <script type="module">
-  window.chartT = new Highcharts.Chart({
-    innerheight: 10,
-    chart: { renderTo: 'chart-temperature' },
-    title: { text: 'Temperature and Humidity' },
-    series: [
-      {
-        name: 'Temperature',
-        data: [],
-        color: '#059e8a'
-      },
-      {
-        name: 'Humidity',
-        data: [],
-        color: '#f15c80'
-      }
-    ],
-    plotOptions: {
-      line: {
-        animation: false,
-        dataLabels: { enabled: true }
-      }
+  Highcharts.setOptions({
+    global: {
+      timezoneOffset: -8 * 60, // Timezone offset for GMT+8 in minutes
     },
-    xAxis: { type: 'datetime',
-      dateTimeLabelFormats: { second: '%H:%M:%S' }
-    },
-    yAxis: {
-      title: { text: 'Temperature (Celsius) / Humidity (%)' }
-      //title: { text: 'Temperature (Fahrenheit) / Humidity (%)' }
-    },
-    credits: { enabled: false }
   });
+ window.chartT = new Highcharts.Chart({
+  innerheight: 10,
+  chart: { renderTo: 'chart-temperature' },
+  title: { text: 'Temperature and Humidity' },
+  series: [
+    {
+      name: 'Temperature',
+      data: [],
+      color: '#059e8a'
+    },
+    {
+      name: 'Humidity',
+      data: [],
+      color: '#f15c80'
+    }
+  ],
+  plotOptions: {
+    line: {
+      animation: false,
+      dataLabels: { enabled: true }
+    }
+  },
+  xAxis: {
+    type: 'datetime',
+    dateTimeLabelFormats: { second: '%H:%M:%S' },
+  },
+  yAxis: {
+    title: { text: 'Temperature (Celsius) / Humidity (%)' }
+  },
+  credits: { enabled: false }
+});
 
-  const firebaseUrl = "https://testcase-190aa-default-rtdb.asia-southeast1.firebasedatabase.app/DHT11.json";
+  const firebaseUrl = "https://testcase-190aa-default-rtdb.asia-southeast1.firebasedatabase.app/.json";
   
   function fetchTemperatureAndHumidity() {
-    fetch(firebaseUrl)
-      .then((response) => response.json())
-      .then((data) => {
-        const timestamp = (new Date()).getTime();
-        const temperature = parseFloat(data.Temperature);
-        const humidity = parseFloat(data.Humidity);
+  fetch(firebaseUrl)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Data from Firebase:", data);
+      
+      // Convert the timestamp string to a Date object and then to Unix time in milliseconds
+      const timestamp = new Date(data.Timestamp).getTime();
+      
+      const temperature = parseFloat(data.DHT11.Temperature);
+      const humidity = parseFloat(data.DHT11.Humidity);
 
-        if (window.chartT.series[0].data.length > 40) {
-          window.chartT.series[0].addPoint([timestamp, temperature], true, true, true);
-          window.chartT.series[1].addPoint([timestamp, humidity], true, true, true);
-        } else {
-          window.chartT.series[0].addPoint([timestamp, temperature], true, false, true);
-          window.chartT.series[1].addPoint([timestamp, humidity], true, false, true);
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching temperature and humidity:", error);
-      });
-  }
-
+      if (window.chartT.series[0].data.length > 40) {
+        window.chartT.series[0].addPoint([timestamp, temperature], true, true, true);
+        window.chartT.series[1].addPoint([timestamp, humidity], true, true, true);
+      } else {
+        window.chartT.series[0].addPoint([timestamp, temperature], true, false, true);
+        window.chartT.series[1].addPoint([timestamp, humidity], true, false, true);
+      }
+    })
+    .catch((error) => {
+      console.error("Error fetching temperature and humidity:", error);
+    });
+}
   // Fetch the data initially
   fetchTemperatureAndHumidity();
   setInterval(fetchTemperatureAndHumidity, 10000); // Fetch data every 10 seconds
 </script>
-</div></div></div>
+</div></div>
 <!-- End Line Chart -->
 
     </div>
@@ -230,6 +237,12 @@
   </div><!-- End Temperature Card -->
   
   <script type="module">
+    Highcharts.setOptions({
+      global: {
+        timezoneOffset: -8 * 60, // Timezone offset for GMT+8 in minutes
+      },
+    });
+  
     window.chartTemp = new Highcharts.Chart({
       innerheight: 10,
       chart: { renderTo: 'chart-temp' },
@@ -254,14 +267,19 @@
       },
       credits: { enabled: false }
     });
-    const firebaseUrl1 = "https://testcase-190aa-default-rtdb.asia-southeast1.firebasedatabase.app/DHT11.json";
-
+  
+    const firebaseUrl1 = "https://testcase-190aa-default-rtdb.asia-southeast1.firebasedatabase.app/.json";
+  
     function fetchTemperature() {
       fetch(firebaseUrl1)
         .then((response) => response.json())
         .then((data) => {
-          const timestamp = (new Date()).getTime();
-          const temperature = parseFloat(data.Temperature);
+          console.log("Data from Firebase:", data);
+  
+          // Convert the timestamp string to a Date object and then to Unix time in milliseconds
+          const timestamp = new Date(data.Timestamp).getTime();
+  
+          const temperature = parseFloat(data.DHT11.Temperature);
   
           if (window.chartTemp.series[0].data.length > 40) {
             window.chartTemp.series[0].addPoint([timestamp, temperature], true, true, true);
@@ -279,6 +297,7 @@
     setInterval(fetchTemperature, 10000); // Fetch data every 10 seconds
   </script>
   
+  
 
 
 <!-- Humidity line chart Card -->
@@ -288,8 +307,12 @@
         <!-- Humidity Line Chart -->
         <div id="chart-humidity"></div>
         <script type="module">
-          const firebaseUrl2 = "https://testcase-190aa-default-rtdb.asia-southeast1.firebasedatabase.app/DHT11.json";
-  
+          Highcharts.setOptions({
+            global: {
+              timezoneOffset: -8 * 60, // Timezone offset for GMT+8 in minutes
+            },
+          });
+        
           window.chartH = new Highcharts.Chart({
             innerheight: 10,
             chart: { renderTo: 'chart-humidity' },
@@ -313,14 +336,20 @@
             },
             credits: { enabled: false }
           });
-  
+        
+          const firebaseUrl2 = "https://testcase-190aa-default-rtdb.asia-southeast1.firebasedatabase.app/.json";
+        
           function fetchHumidity() {
             fetch(firebaseUrl2)
               .then((response) => response.json())
               .then((data) => {
-                const timestamp = (new Date()).getTime();
-                const humidity = parseFloat(data.Humidity);
-  
+                console.log("Data from Firebase:", data);
+        
+                // Convert the timestamp string to a Date object and then to Unix time in milliseconds
+                const timestamp = new Date(data.Timestamp).getTime();
+        
+                const humidity = parseFloat(data.DHT11.Humidity);
+        
                 if (window.chartH.series[0].data.length > 40) {
                   window.chartH.series[0].addPoint([timestamp, humidity], true, true, true);
                 } else {
@@ -331,11 +360,12 @@
                 console.error("Error fetching humidity:", error);
               });
           }
-  
+        
           // Fetch the data initially
           fetchHumidity();
           setInterval(fetchHumidity, 10000); // Fetch data every 10 seconds
         </script>
+        
         <!-- End Humidity Line Chart -->
       </div>
     </div>
@@ -349,11 +379,14 @@
         <!-- CO2 Line Chart -->
         <div id="chart-co2"></div>
         <script type="module">
-          import { db } from './realtimedb.js';
-          import { ref, onValue } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-database.js";
-          
-          const firebaseUrl3 = "https://testcase-190aa-default-rtdb.asia-southeast1.firebasedatabase.app/MQ135.json";
-  
+          Highcharts.setOptions({
+            global: {
+              timezoneOffset: -8 * 60, // Timezone offset for GMT+8 in minutes
+            },
+          });
+        
+          const firebaseUrl3 = "https://testcase-190aa-default-rtdb.asia-southeast1.firebasedatabase.app/.json";
+        
           window.chartCO2 = new Highcharts.Chart({
             innerheight: 10,
             chart: { renderTo: 'chart-co2' },
@@ -377,14 +410,17 @@
             },
             credits: { enabled: false }
           });
-  
+        
           function fetchCO2() {
             fetch(firebaseUrl3)
               .then((response) => response.json())
               .then((data) => {
-                const timestamp = (new Date()).getTime();
-                const co2 = parseFloat(data.CO2);
-  
+                console.log("Data from Firebase:", data);
+        
+                // Convert the timestamp string to a Date object and then to Unix time in milliseconds
+                const timestamp = new Date(data.Timestamp).getTime();
+                const co2 = parseFloat(data.MQ135.CO2);
+        
                 if (window.chartCO2.series[0].data.length > 40) {
                   window.chartCO2.series[0].addPoint([timestamp, co2], true, true, true);
                 } else {
@@ -395,11 +431,12 @@
                 console.error("Error fetching CO2:", error);
               });
           }
-  
+        
           // Fetch the data initially
           fetchCO2();
           setInterval(fetchCO2, 10000); // Fetch data every 10 seconds
         </script>
+        
         <!-- End CO2 Line Chart -->
       </div>
     </div>

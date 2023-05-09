@@ -26,6 +26,9 @@ var temperatureElement = document.getElementById("Temperature");
 var humidityElement = document.getElementById("humidity");
 var CO2element = document.getElementById("co2");
 var airdescriptElement = document.getElementById("airdesc")
+let latestTemperature = null;
+let latestHumidity = null;
+let latestCO2 = null;
 
 // Read data from Firebase
 onValue(ref(db, "/DHT11"), (snapshot) => {
@@ -34,9 +37,14 @@ onValue(ref(db, "/DHT11"), (snapshot) => {
 //   store data from database
 const temp = data.Temperature;
 const hum = data.Humidity;
+  // store data from database
+  latestTemperature = data.Temperature;
+  latestHumidity = data.Humidity;
   // Display data on the web app
   temperatureElement.innerText = temp + "°C";
   humidityElement.innerText =  hum + "%";
+    // Update the circle's popup
+    updateCirclePopup(latestTemperature, latestHumidity, latestCO2);
 });
 
 // Read data from Firebase
@@ -44,11 +52,14 @@ onValue(ref(db, "/MQ135"), (snapshot) => {
     var data = snapshot.val();
   
   //   store data from database
+  latestCO2 = data.CO2;
   const co2 = data.CO2;
   const airdesc = data.AirQuality;
     // Display data on the web app
     CO2element.innerText = co2;
     airdescriptElement.innerText =  airdesc;
+      // Update the circle's popup
+  updateCirclePopup(latestTemperature, latestHumidity, latestCO2);
   });
 
 // Emit a custom event when temperature is updated
@@ -57,18 +68,23 @@ function emitTemperatureUpdate(timestamp, temperature) {
     window.dispatchEvent(event);
   }
   
-  // Listen to temperature data updates from Firebase
-//   onValue(ref(db, "/DHT11"), (snapshot) => {
-//     var data = snapshot.val();
+  function updateCirclePopup(temperature, humidity, CO2) {
+    // Create the circle or update its coordinates
+    if (!window.circle) {
+      window.circle = L.circle([8.241, 124.244], {
+        color: 'red',
+        radius: 200,
+        fillOpacity: 0.2,
+        fillColor: 'red',
+      }).addTo(map);
+    } else {
+      window.circle.setLatLng([8.241, 124.244]);
+    }
   
-//     // Get the timestamp and temperature
-//     const timestamp = (new Date()).getTime();
-//     const temperature = parseFloat(data.Temperature);
-  
-//     // Emit a custom event with the updated temperature
-//     emitTemperatureUpdate(timestamp, temperature);
-//   });
-
-  
+    // Update the popup content and open it
+    window.circle
+      .bindPopup(`Temperature: ${temperature}°C<br>Humidity: ${humidity}%<br>CO2: ${CO2}`)
+      .openPopup();
+  }
   
   

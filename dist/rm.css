@@ -1,98 +1,103 @@
 body{
-    margin:0;
+  margin:0;
 }
 .container-main{
-    width: 99vw;
-    height: calc(100vh - 56px); /* 100vh - navbar height */
-    display: grid;
-  
-    grid-template-columns: 2fr 2fr 2fr;
-    grid-template-rows: 1px 1fr 1fr 1fr;
-  
-    gap: 10px;
-    padding: 10px;
-    box-sizing: border-box ;
-  }
-  .container-main div{
-    /* padding: 10px; */
-    /* border: 1px solid #000000; */
-  }
+  width: 99vw;
+  height: calc(100vh - 56px); /* 100vh - navbar height */
+  display: grid;
 
-  .map{
-    grid-row-start: 1;
-    grid-row-end: span 4;
-    grid-column-start: 1;
-    grid-column-end: 3;
+  grid-template-columns: 2fr 2fr 2fr;
+  grid-template-rows: 1px 1fr 1fr 1fr;
 
-    border: 3px solid #0D6EFD;
-  }
+  gap: 10px;
+  padding: 10px;
+  box-sizing: border-box ;
+}
+.container-main div{
+  /* padding: 10px; */
+  /* border: 1px solid #000000; */
+}
 
-  /* For Cards */
-  .card{
-    grid-row-start: 1;
-    grid-row-end: span 4;
-    grid-column-start: 1;
-    grid-column-end: 3;
-  }
+.map{
+  grid-row-start: 1;
+  grid-row-end: span 4;
+  grid-column-start: 1;
+  grid-column-end: 3;
 
-  .card-title span {
-    color: #899bbd;
-    font-size: 14px;
-    font-weight: 400;
-  }
+  border: 3px solid #0D6EFD;
+}
 
-  .card-body span {
-    color: #899bbd;
-    font-size: 14px;
-    font-weight: 400;
-  }
+/* For Cards */
+.card{
+  grid-row-start: 1;
+  grid-row-end: span 4;
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
 
-  .gas-description h5 {
-    padding-left: 8rem;
-  }
+.card-title span {
+  color: #899bbd;
+  font-size: 14px;
+  font-weight: 400;
+}
 
-  .temp-card .card-icon {
-    color: #4154f1;
-    background: #f6f6fe;
-  }
+.card-body span {
+  color: #899bbd;
+  font-size: 14px;
+  font-weight: 400;
+}
 
-  .humid-card .card-icon {
-    color: #ff771d;
-    background: #f6f6fe;
-  }
+.gas-description h5 {
+  padding-left: 8rem;
+}
 
-  .gas-card .card-icon {
-    color: #2eca6a;
-    background: #f6f6fe;
-  }
+.temp-card .card-icon {
+  color: #4154f1;
+  background: #f6f6fe;
+}
 
-  .card-icon {
-    font-size: 32px;
-    line-height: 0;
-    width: 64px;
-    height: 64px;
-    flex-shrink: 0;
-    flex-grow: 0;
-  }
+.humid-card .card-icon {
+  color: #ff771d;
+  background: #f6f6fe;
+}
 
-  .rounded-circle {
-    border-radius: 50%!important;
-  }
+.gas-card .card-icon {
+  color: #2eca6a;
+  background: #f6f6fe;
+}
 
-  .card-body h6 {
-    font-size: 28px;
-    color: #012970;
-    font-weight: 700;
-    margin: 0;
-    padding: 0;
-  }
-  /* End for Cards */
-  .container-gap {
-    margin-bottom: 15px; /* Adjust the value as needed */
-  }
-  .air-desc-container {
-    top: 20%;
-    right: 0;
-    transform: translateY(-5%);
-    transform: translatex(-30%);
-  }
+.card-icon {
+  font-size: 32px;
+  line-height: 0;
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+
+.rounded-circle {
+  border-radius: 50%!important;
+}
+
+.card-body h6 {
+  font-size: 28px;
+  color: #012970;
+  font-weight: 700;
+  margin: 0;
+  padding: 0;
+}
+
+.chart-container {
+  height: 345px !important;
+}
+/* End for Cards */
+.container-gap {
+  margin-bottom: 10px; /* Adjust the value as needed */
+}
+
+.air-desc-container {
+  top: 20%;
+  right: 0;
+  transform: translateY(-5%);
+  transform: translatex(-30%);
+}
